@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# isolinux
+# mkisofs -o output_file.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Custom Live System" /path/to/source
+#
+# grub EFI boot
+# mkisofs -o output.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Ubuntu Custom ISO Preseed" .
+
 
 MOUNT_DIR=/mnt
 GRUB_CFG=$(pwd)/grub.cfg
@@ -85,13 +91,19 @@ if (! cp -rp $MOUNT_DIR $TMP_DIR) ; then
     die "Failed to copy $MOUNT_DIR to $TMP_DIR"
 fi
 
-log "Copying grub.cfg"
-if (! cp -v $CFG_DIR/grub.cfg $TMP_DIR/boot/grub) ; then
-    die "Failed to copy $GRUB_CFG to $TMP_DIR/boot/grub"
+log "Copying isolinux.cfg"
+if (! cp -v $CFG_DIR/isolinux.cfg $TMP_DIR/isolinux) ; then
+    die "Failed to copy $CFG_DIR/isolinux.cfg to $TMP_DIR/isolinux"
 fi
 
+#log "Copying grub.cfg"
+#if (! cp -v $CFG_DIR/grub.cfg $TMP_DIR/boot/grub) ; then
+#    die "Failed to copy $CFG_DIR/grub.cfg to $TMP_DIR/boot/grub"
+#fi
+
+# mkisofs -o output.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Ubuntu Custom ISO Preseed" .
 log "Making iso"
-if (! mkisofs -o $ISO_OUT $TMP_DIR) ; then
+if (! mkisofs -o $ISO_OUT -b isolinux/isolinux.bin -c isolinux/isolinux.cat -no-emul-boot -boot-info-table -J -R -V "Custom LinuxMint" $TMP_DIR) ; then
     die "Failed to build $ISO_OUT from $TMP_DIR"
 fi
 

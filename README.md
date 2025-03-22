@@ -1,31 +1,18 @@
 # Method for auto installing linux mint by using a preseed
 
-Copy custom grub.cfg file to installation medium
 
-    MOUNT_DIR=/mnt
-    REPO_DIR=~/mint_autoinstall
-    SOURCE_ISO_FILE=~/linuxmint-XX.X-cinnamon-64bit.iso
-    DEST_ISO_FILE=~/custom_mint.iso
-    TMP_DIR=~/tmp_iso
+Use script to build a custom iso that uses the preseed from this repo.
 
-    # install package containing mkisofs:
-    sudo pacman -S cdrtools         # Arch
-    sudo apt install mkisofs        # Debian/Mint/Ubuntu
+    ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -c path/to/this/repo
 
-    # mount installation medium on: /mnt
-    sudo mount -o loop $SOURCE_ISO_FILE $MOUNT_DIR
+Write the new iso file to a usb stick
 
-    # copy all files to temporary directory
-    sudo cp -rp $MOUNT_DIR $TMP_DIR
+    dd if=out.iso of=/path/to/blockdevice bs=8M status=progress
 
-    # copy grub.cfg to temporary directory
-    sudo cp $REPO_DIR/grub.cfg $TMP_DIR/boot/grub
-
-    # rebuild iso file
-    mkisofs -o $DEST_ISO_FILE $TMP_DIR
+When booting from this USB stick, two new boot menu options are available.  
 
 During the OEM install the preseed files are fetched from this repo.  
-So the latest version will be used from the master branch.  
+So the latest version will always be used from the master branch.  
 
 
 # Credits
