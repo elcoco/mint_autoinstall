@@ -5,7 +5,7 @@ MOUNT_DIR=/mnt
 TMP_DIR=/tmp/build_iso
 
 usage() {
-    echo "build_iso.sh -i <INPUT_ISO> -o <OUTPUT_ISO> -c <REPO_DIR>"
+    echo "build_iso.sh -i <INPUT_ISO> -o <OUTPUT_ISO> -c <ASSETS_DIR>"
 }
 
 die() {
@@ -29,7 +29,7 @@ cleanup() {
     fi
 }
 
-while getopts ":i:o:c:h" c; do
+while getopts ":i:o:a:h" c; do
     case $c in
         i) 
             ISO_IN="$OPTARG"
@@ -37,8 +37,8 @@ while getopts ":i:o:c:h" c; do
         o) 
             ISO_OUT="$OPTARG"
             ;;
-        c) 
-            CFG_DIR="$OPTARG"
+        a) 
+            ASSETS_DIR="$OPTARG"
             ;;
         :)
             usage
@@ -64,8 +64,8 @@ fi
 [[ -z "$ISO_OUT" ]] && usage && die "Specify iso destination path!"
 [[ -f "$ISO_OUT" ]] && die "Iso destination path already exists at $ISO_OUT, remove first!"
 
-[[ -z "$CFG_DIR" ]] && usage && die "Specify path to config directory!"
-[[ -d "$CFG_DIR" ]] || die "Failed to find config directory, $CFG_DIR"
+[[ -z "$ASSETS_DIR" ]] && usage && die "Specify path to assets directory!"
+[[ -d "$ASSETS_DIR" ]] || die "Failed to find assets directory, $ASSETS_DIR"
 
 [[ $(command -v mkisofs 2>&1) ]] || die "mkisofs not found, install first!"
 
@@ -84,20 +84,25 @@ if (! cp -rp "$MOUNT_DIR" "$TMP_DIR") ; then
     die "Failed to copy $MOUNT_DIR to $TMP_DIR"
 fi
 
-log "Copying isolinux.cfg"
-if (! cp -v "$CFG_DIR/isolinux.cfg" "$TMP_DIR/isolinux") ; then
-    die "Failed to copy $CFG_DIR/isolinux.cfg to $TMP_DIR/isolinux"
+log "Copying assets directory"
+if (! cp -rpv "$ASSETS_DIR" "$TMP_DIR/assets") ; then
+    die "Failed to copy $ASSETS_DIR to $TMP_DIR/assets"
 fi
 
-log "Copying custom preseed"
-mkdir -p "$TMP_DIR/preseed"
-if (! cp -v "$CFG_DIR/linuxmint_custom.seed" "$TMP_DIR/preseed/linuxmint_custom.seed") ; then
-    die "Failed to copy $CFG_DIR/linuxmint_custom.seed to $TMP_DIR/preseed/linuxmint_custom.seed"
+log "Copying isolinux.cfg"
+if (! cp -v "$ASSETS_DIR/isolinux.cfg" "$TMP_DIR/isolinux") ; then
+    die "Failed to copy $ASSETS_DIR/isolinux.cfg to $TMP_DIR/isolinux"
 fi
+
+#log "Copying custom preseed"
+#mkdir -p "$TMP_DIR/preseed"
+#if (! cp -v "$ASSETS_DIR/linuxmint_custom.seed" "$TMP_DIR/preseed/linuxmint_custom.seed") ; then
+#    die "Failed to copy $ASSETS_DIR/linuxmint_custom.seed to $TMP_DIR/preseed/linuxmint_custom.seed"
+#fi
 
 #log "Copying grub.cfg"
-#if (! cp -v $CFG_DIR/grub.cfg $TMP_DIR/boot/grub) ; then
-#    die "Failed to copy $CFG_DIR/grub.cfg to $TMP_DIR/boot/grub"
+#if (! cp -v $ASSETS_DIR/grub.cfg $TMP_DIR/boot/grub) ; then
+#    die "Failed to copy $ASSETS_DIR/grub.cfg to $TMP_DIR/boot/grub"
 #fi
 
 # mkisofs -o output.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Ubuntu Custom ISO Preseed" .

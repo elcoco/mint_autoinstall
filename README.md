@@ -16,7 +16,7 @@ The script requires mkisofs to be installed:
 
 Run the script:
 
-    ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -c path/to/this/repo
+    ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -a path/to/this/repo/assets
 
 ## Write image to disk
 
@@ -45,3 +45,5 @@ Unfortunately the OEM install is still asking for an OEM password. I'm trying to
 
 https://github.com/Pauchu/linux-mint-20-preseeding  
 Example preseed config [options](https://www.debian.org/releases/bookworm/example-preseed.txt)  
+https://gitlab.com/morph027/preseed-cinnamon-ubuntu
+https://linuxconfig.org/how-to-perform-unattedended-debian-installations-with-preseed

@@ -1,17 +1,17 @@
 # Helpfull debian example preseed: https://www.debian.org/releases/bookworm/example-preseed.txt
-#
 
 
-# Perform post install stuff
+### POST INSTALL ##############################################################
 d-i preseed/late_command string \
-    in-target apt update; \
-    in-target apt install unattended-upgrades; \
     cp /assets/sources.list /target/etc/apt/sources.list.d/official-package-repositories.list; \
-
+    in-target apt update; \
+    in-target mintupdate-automation upgrade enable
+    #in-target apt install unattended-upgrades; \
 
 # custom packages to install
 #d-i pkgsel/include string nmap
 #d-i pkgsel/update-policy select unattended-upgrades
+
 
 ### INSTALLER #################################################################
 # use non-free codecs
