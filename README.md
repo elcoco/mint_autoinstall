@@ -29,9 +29,10 @@ Be carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't a
 
     sudo dd if=out.iso of=/path/to/usb_stick bs=8M status=progress
 
+The linuxmint_custom.seed file is copied to the image.
 When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install".  
-During this OEM install the preseed file is fetched from the master branch in this repo.  
-This means that internet access is a requirement.
+During this OEM install the preseed file is read and the install should be completely silent.  
+Unfortunately the OEM install is still asking for an OEM password. I'm trying to find a way to disable that.  
 
 # Changes from the default install
 

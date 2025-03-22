@@ -28,8 +28,8 @@ ubiquity ubiquity/reboot boolean true
 
 ### OEM #######################################################################
 #d-i oem-config/username string oem
-d-i oem-config/password password disko
-d-i oem-config/password-again password disko
+d-i oem-config/password password oem
+d-i oem-config/password-again password oem
 
 # oem-config-prepare sets the first run wizard for next login
  ubiquity ubiquity/success_command string chroot /target oem-config-prepare
