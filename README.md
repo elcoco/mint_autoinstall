@@ -8,7 +8,7 @@ For a list of customizations, see below.
 
 We need to start off with a default linux mint install image: [Download](https://linuxmint.com/edition.php?id=319)
 
-In this repository is a [script](build_iso.sh) that automatically builds a custom image from a default linux mint image.  
+In this repository is a [script](/build_iso.sh) that automatically builds a custom image from a default linux mint image.  
 The script requires mkisofs to be installed:  
 
     sudo pacman -S cdrtools         # Arch
@@ -29,7 +29,7 @@ Be carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't a
 
     sudo dd if=out.iso of=/path/to/usb_stick bs=8M status=progress
 
-When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install"
+When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install".  
 During this OEM install the preseed file is fetched from the master branch in this repo.  
 This means that internet access is a requirement.
 
@@ -42,4 +42,5 @@ This means that internet access is a requirement.
 
 # Credits
 
-(https://github.com/Pauchu/linux-mint-20-preseeding)
+https://github.com/Pauchu/linux-mint-20-preseeding  
+Example preseed config [options](https://www.debian.org/releases/bookworm/example-preseed.txt)  

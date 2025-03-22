@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 
-# isolinux
-# mkisofs -o output_file.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Custom Live System" /path/to/source
-#
-# grub EFI boot
-# mkisofs -o output.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Ubuntu Custom ISO Preseed" .
-
 
 MOUNT_DIR=/mnt
-GRUB_CFG=$(pwd)/grub.cfg
 TMP_DIR=/tmp/build_iso
 
 usage() {
@@ -26,7 +19,7 @@ log() {
 }
 
 cleanup() {
-    if [[ -d $TMP_DIR ]] ; then
+    if [[ -d "$TMP_DIR" ]] ; then
         log "Removing tmp directory: $TMP_DIR..."
         rm -r $TMP_DIR
     fi
@@ -65,35 +58,41 @@ if [[ $(findmnt -M "$MOUNT_DIR") ]] ; then
 fi
 
 [[ "$EUID" -ne 0 ]] && die "Please run this script as root!"
-[[ -z $ISO_IN ]] && usage && die "Specify source iso: -i <path/to/source.iso>"
-[[ -f $ISO_IN ]] || die "Source iso not found: $ISO_IN"
+[[ -z "$ISO_IN" ]] && usage && die "Specify source iso: -i <path/to/source.iso>"
+[[ -f "$ISO_IN" ]] || die "Source iso not found: $ISO_IN"
 
-[[ -z $ISO_OUT ]] && usage && die "Specify iso destination path!"
-[[ -f $ISO_OUT ]] && die "Iso destination path already exists at $ISO_OUT, remove first!"
+[[ -z "$ISO_OUT" ]] && usage && die "Specify iso destination path!"
+[[ -f "$ISO_OUT" ]] && die "Iso destination path already exists at $ISO_OUT, remove first!"
 
-[[ -z $CFG_DIR ]] && usage && die "Specify path to config directory!"
-[[ -d $CFG_DIR ]] || die "Failed to find config directory, $CFG_DIR"
+[[ -z "$CFG_DIR" ]] && usage && die "Specify path to config directory!"
+[[ -d "$CFG_DIR" ]] || die "Failed to find config directory, $CFG_DIR"
 
 [[ $(command -v mkisofs 2>&1) ]] || die "mkisofs not found, install first!"
 
 
-if [[ -d $TMP_DIR ]] ; then
+if [[ -d "$TMP_DIR" ]] ; then
     log "Removing tmp directory: $TMP_DIR..."
-    rm -r $TMP_DIR
+    rm -r "$TMP_DIR"
 fi
 
-if (! mount -v -o loop $ISO_IN $MOUNT_DIR) ; then
+if (! mount -v -o loop "$ISO_IN" "$MOUNT_DIR") ; then
     die "Failed to mount $ISO_IN on $MOUNT_DIR"
 fi
 
 log "Copying files to tmp dir"
-if (! cp -rp $MOUNT_DIR $TMP_DIR) ; then
+if (! cp -rp "$MOUNT_DIR" "$TMP_DIR") ; then
     die "Failed to copy $MOUNT_DIR to $TMP_DIR"
 fi
 
 log "Copying isolinux.cfg"
-if (! cp -v $CFG_DIR/isolinux.cfg $TMP_DIR/isolinux) ; then
+if (! cp -v "$CFG_DIR/isolinux.cfg" "$TMP_DIR/isolinux") ; then
     die "Failed to copy $CFG_DIR/isolinux.cfg to $TMP_DIR/isolinux"
+fi
+
+log "Copying custom preseed"
+mkdir -p "$TMP_DIR/preseed"
+if (! cp -v "$CFG_DIR/linuxmint_custom.seed" "$TMP_DIR/preseed/linuxmint_custom.seed") ; then
+    die "Failed to copy $CFG_DIR/linuxmint_custom.seed to $TMP_DIR/preseed/linuxmint_custom.seed"
 fi
 
 #log "Copying grub.cfg"
@@ -103,7 +102,7 @@ fi
 
 # mkisofs -o output.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Ubuntu Custom ISO Preseed" .
 log "Making iso"
-if (! mkisofs -o $ISO_OUT -b isolinux/isolinux.bin -c isolinux/isolinux.cat -no-emul-boot -boot-info-table -J -R -V "Custom LinuxMint" $TMP_DIR) ; then
+if (! mkisofs -o "$ISO_OUT" -b isolinux/isolinux.bin -c isolinux/isolinux.cat -no-emul-boot -boot-info-table -J -R -V "Custom LinuxMint" $TMP_DIR) ; then
     die "Failed to build $ISO_OUT from $TMP_DIR"
 fi
 
