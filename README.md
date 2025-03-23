@@ -13,6 +13,7 @@ For this to work we have to build a new install image.
     - NL apt mirror
     - Automatic partititioning on biggest harddisk
     - Unattended updates (/etc/system/systemd/timers.targets.wants/mintupdate-automation-upgrade.timer)
+    - Install mint-meta-codecs
 
 ## Creating install medium
 ### Building the custom image

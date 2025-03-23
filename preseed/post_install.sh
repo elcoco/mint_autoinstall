@@ -19,7 +19,7 @@ deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe m
 EOF
 
 apt update
-apt install -y nmap
+apt install -y mint-meta-codecs
 
 # Set automatic updates
 mintupdate-automation upgrade enable
