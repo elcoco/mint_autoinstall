@@ -2,7 +2,7 @@
 NOTE: I tested with the latest (v22.1) cinnamon linux mint iso on a virtual machine.  
       This still needs proper testing on real hardware.  
 
-A preseed file is a list of answers to questions that are asked by the linux mint installers.  
+A preseed file is a list of answers to questions that are asked by the linux mint installer.  
 It's the native way of doing automatic installs on debian like distro's.  
 
 It's easy to set things like localization, apt sources, extra users or run custom scripts.  
@@ -44,6 +44,23 @@ Be carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't a
 The linuxmint_custom.seed file is copied to the image.  
 When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install".  
 During this OEM install the preseed file is read and the install should be completely silent.  
+
+## Debugging
+### Mount virtualbox .VDI files with fuse
+
+    # Create mountpoints
+    mkdir -p mnt/expanded
+    mkdir -p mnt/vol2
+
+    # Find UUID of image
+    vboximg-mount --list
+
+    # Mount expanded volumes inside image
+    vboximg-mount --image 95cbca92-5161-4be3-ad9f-24f3311b6e3a -o allow_other mnt/expanded
+
+    # Mount volume
+    sudo mount mnt/expanded/vol2 mnt/vol2
+
 
 
 ## Credits

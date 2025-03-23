@@ -35,23 +35,26 @@ d-i debconf/priority select critical
 #ubiquity ubiquity/success_command string in-target firstcommand; in-target secondcommand;
   
 # This is how to make the installer shutdown when finished, but not reboot into the installed system.
-d-i debian-installer/exit/halt boolean true
+#d-i debian-installer/exit/halt boolean true
 
 # Ubiquity will ignore d-i exit commands, use these instead
-d-i ubiquity/summary note
-ubiquity ubiquity/reboot boolean true
+#ubiquity ubiquity/reboot boolean true
+ubiquity ubiquity/poweroff boolean true
 
 
 ### OEM #######################################################################
-d-i oem-config/enable boolean true
 d-i ubiquity/summary note
 
+# NOTE: for some reason this resulted in a broken system.
+#       Install ended successfully but failed to remove oem user and didn't boot.
+
 # Set temporary oem account, will be removed later.
-d-i passwd/user-fullname string OEM
-d-i passwd/username string oem
-d-i passwd/user-password password oem
-d-i passwd/user-password-again password oem
-d-i user-setup/allow-password-weak boolean true
+#d-i oem-config/enable boolean true
+#d-i passwd/user-fullname string OEM
+#d-i passwd/username string oem
+#d-i passwd/user-password password oem
+#d-i passwd/user-password-again password oem
+#d-i user-setup/allow-password-weak boolean true
 
 
 ### LOCALIZATION ##############################################################

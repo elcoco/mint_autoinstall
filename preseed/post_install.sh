@@ -7,7 +7,7 @@ echo "Starting post_install.sh" > /tmp/install.log
 
 [[ -d /etc/apt ]] || mkdir -v /etc/apt
 
-cat << EOF > /etc/apt/source.list
+cat << EOF > /etc/apt/sources.list
 deb https://mintlinux.mirror.wearetripple.com/packages xia main upstream import backport
 deb http://ftp.tudelft.nl/archive.ubuntu.com noble main restricted universe multiverse
 deb http://ftp.tudelft.nl/archive.ubuntu.com noble-updates main restricted universe multiverse
