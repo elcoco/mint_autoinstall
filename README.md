@@ -1,11 +1,12 @@
 # Method for auto installing linux mint by using a preseed
 
 NOTE: I tested with the latest (v22.1) cinnamon linux mint iso on a virtual machine.  
-      so this needs proper testing on real hardware.  
+      This still needs proper testing on real hardware.  
 
-A preseed file is a list of answers to questions that are asked while installing linux mint.  
-It's the native way of automating installing debian like distro's.  
-This way it's easy to set things like localization, apt sources, extra users or run custom scripts.  
+A preseed file is a list of answers to questions that are asked by the linux mint installers.  
+It's the native way of doing automatic installs on debian like distro's.  
+
+It's easy to set things like localization, apt sources, extra users or run custom scripts.  
 For this to work we have to build a new install image.  
 
 ## Changes from the default install
@@ -17,9 +18,12 @@ For this to work we have to build a new install image.
 ## Creating install medium
 ### Building the custom image
 
-We need to start off with a default linux mint install image: [Download](https://linuxmint.com/edition.php?id=319)
+We need to start off with a default linux mint install image: [download](https://linuxmint.com/edition.php?id=319)
 
 In this repository you can find a [script](/build_iso.sh) that automatically builds a custom image from a default linux mint image.  
+
+    git clone https://github.com/elcoco/mint_autoinstall
+
 The script requires mkisofs to be installed:  
 
     sudo pacman -S cdrtools         # Arch
