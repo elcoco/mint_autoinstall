@@ -3,10 +3,9 @@
 
 ### POST INSTALL ##############################################################
 d-i preseed/late_command string \
-    cp /assets/sources.list /target/etc/apt/sources.list.d/official-package-repositories.list; \
+    cp /cdrom/preseed/sources.list /target/etc/apt/sources.list.d/official-package-repositories.list; \
     in-target apt update; \
     in-target mintupdate-automation upgrade enable
-    #in-target apt install unattended-upgrades; \
 
 # custom packages to install
 #d-i pkgsel/include string nmap
@@ -39,6 +38,7 @@ ubiquity ubiquity/reboot boolean true
 # TODO: doesn't work for some reason, installer still asks for oem password
 d-i oem-config/password password oem
 d-i oem-config/password-again password oem
+d-i oem-config/allow-password-weak boolean true
 
 # oem-config-prepare sets the first run wizard for next login
  ubiquity ubiquity/success_command string chroot /target oem-config-prepare

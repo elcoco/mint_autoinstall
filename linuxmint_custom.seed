@@ -6,7 +6,7 @@
 d-i preseed/late_command string \
     in-target apt update; \
     in-target apt install unattended-upgrades; \
-    cp /assets/sources.list /target/etc/apt/sources.list.d/official-package-repositories.list; \
+    cp /preseed/sources.list /target/etc/apt/sources.list.d/official-package-repositories.list; \
 
 
 # custom packages to install

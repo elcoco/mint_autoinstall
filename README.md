@@ -16,7 +16,7 @@ The script requires mkisofs to be installed:
 
 Run the script:
 
-    ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -a path/to/this/repo/assets
+    ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -p path/to/this/repo/preseed
 
 ## Write image to disk
 
@@ -38,7 +38,7 @@ Unfortunately the OEM install is still asking for an OEM password. I'm trying to
 
     - NL apt mirror
     - Automatic partititioning on biggest harddisk
-    - Unattended updates
+    - Unattended updates (/etc/system/systemd/timers.targets.wants/mintupdate-automation-upgrade.timer)
 
 
 # Credits
