@@ -1,60 +1,43 @@
 # Helpfull debian example preseed: https://www.debian.org/releases/bookworm/example-preseed.txt
-#
-ubiquity ubiquity/success_command string in-target /bin/echo "trying echo" > /target/var/log/myfile
 
 
 ### POST INSTALL ##############################################################
 
 # NOTE: Ubiquity uses a subset of the commands from debian installer and silently ignores
 #       the ones it doesn't recognise (like: preseed/late_command, pkgsel)
-
 ubiquity ubiquity/success_command string \
     cp /cdrom/preseed/post_install.sh /target/tmp; \
     in-target chmod +x /tmp/post_install.sh; \
     in-target /bin/bash /tmp/post_install.sh; \
     in-target rm /tmp/post_install.sh
 
-#d-i preseed/late_command string \
-#    cp /cdrom/preseed/post_install.sh /target/tmp; \
-#    in-target chmod +x /tmp/post_install.sh; \
-#    in-target /bin/bash /tmp/post_install.sh; \
-#    in-target rm /tmp/post_install.sh
-
 
 ### INSTALLER #################################################################
 # use non-free codecs
 ubiquity ubiquity/use_nonfree true
 
-# Setting installer to not ask questions
+# Don't ask questions
 d-i debconf/frontend select Noninteractive
 d-i debconf/priority select critical
 
-# Avoid that last message about the install being complete.
-#d-i finish-install/reboot_in_progress note
-
-#ubiquity ubiquity/success_command string in-target firstcommand; in-target secondcommand;
-  
-# This is how to make the installer shutdown when finished, but not reboot into the installed system.
-#d-i debian-installer/exit/halt boolean true
-
-# Ubiquity will ignore d-i exit commands, use these instead
-#ubiquity ubiquity/reboot boolean true
+# Shutdown when done
 ubiquity ubiquity/poweroff boolean true
 
 
 ### OEM #######################################################################
 d-i ubiquity/summary note
 
-# NOTE: for some reason this resulted in a broken system.
-#       Install ended successfully but failed to remove oem user and didn't boot.
+# NOTE: When user checks automatically login, this will leave the user with a broken system.
+#       The OEM user is not removed for some reason and is set to login automatically at boot.
+#       When commented out, it works fine but installer will ask for an OEM password.
 
 # Set temporary oem account, will be removed later.
-#d-i oem-config/enable boolean true
-#d-i passwd/user-fullname string OEM
-#d-i passwd/username string oem
-#d-i passwd/user-password password oem
-#d-i passwd/user-password-again password oem
-#d-i user-setup/allow-password-weak boolean true
+d-i oem-config/enable boolean true
+d-i passwd/user-fullname string OEM
+d-i passwd/username string oem
+d-i passwd/user-password password oem
+d-i passwd/user-password-again password oem
+d-i user-setup/allow-password-weak boolean true
 
 
 ### LOCALIZATION ##############################################################
