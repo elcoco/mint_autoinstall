@@ -85,7 +85,7 @@ if (! cp -rp "$MOUNT_DIR" "$TMP_DIR") ; then
 fi
 
 log "Copying preseed directory"
-if (! cp -rpv "$PRESEED_DIR" "$TMP_DIR/preseed") ; then
+if (! cp -rv "$PRESEED_DIR" "$TMP_DIR/preseed") ; then
     die "Failed to copy $PRESEED_DIR to $TMP_DIR/preseed"
 fi
 
