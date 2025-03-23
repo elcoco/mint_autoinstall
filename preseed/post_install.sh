@@ -2,8 +2,8 @@
 
 # NOTE: Script will be run at end of install inside a chroot
 #
-echo "Running late_commands.sh script"
-echo "Starting late_commands.sh" > /tmp/install.log
+echo "Running post_install.sh script"
+echo "Starting post_install.sh" > /tmp/install.log
 
 [[ -d /etc/apt ]] || mkdir -v /etc/apt
 
@@ -21,4 +21,7 @@ apt install -y nmap
 # Set automatic updates
 mintupdate-automation upgrade enable
 
-echo "Ending late_commands.sh" >> /tmp/install.log
+# Next boot will show OEM user configuration
+oem-config-prepare
+
+echo "Ending post_install.sh" >> /tmp/install.log

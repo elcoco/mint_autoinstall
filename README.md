@@ -1,5 +1,4 @@
 # Method for auto installing linux mint by using a preseed
-
 NOTE: I tested with the latest (v22.1) cinnamon linux mint iso on a virtual machine.  
       This still needs proper testing on real hardware.  
 
@@ -17,7 +16,6 @@ For this to work we have to build a new install image.
 
 ## Creating install medium
 ### Building the custom image
-
 We need to start off with a default linux mint install image: [download](https://linuxmint.com/edition.php?id=319)
 
 In this repository you can find a [script](/build_iso.sh) that automatically builds a custom image from a default linux mint image.  
@@ -34,7 +32,6 @@ Run the script:
     ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -p path/to/this/repo/preseed
 
 ### Write image to disk
-
 Find the device file for your usb stick (probably something like /dev/sdx):
 
     lsblk
@@ -44,16 +41,15 @@ Be carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't a
 
     sudo dd if=out.iso of=/path/to/usb_stick bs=8M status=progress
 
-The linuxmint_custom.seed file is copied to the image.
+The linuxmint_custom.seed file is copied to the image.  
 When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install".  
 During this OEM install the preseed file is read and the install should be completely silent.  
-Unfortunately the OEM install is still asking for an OEM password. I'm trying to find a way to disable that.  
-
 
 
 ## Credits
-
 https://github.com/Pauchu/linux-mint-20-preseeding  
-Example preseed config [options](https://www.debian.org/releases/bookworm/example-preseed.txt)  
-https://gitlab.com/morph027/preseed-cinnamon-ubuntu
-https://linuxconfig.org/how-to-perform-unattedended-debian-installations-with-preseed
+Example debian preseed config [options](https://www.debian.org/releases/bookworm/example-preseed.txt)   
+https://gitlab.com/morph027/preseed-cinnamon-ubuntu  
+https://linuxconfig.org/how-to-perform-unattedended-debian-installations-with-preseed  
+https://wiki.ubuntu.com/UbiquityAutomation  
+https://wiki.ubuntu.com/DebuggingUbiquity  
