@@ -18,6 +18,10 @@ deb http://ftp.snt.utwente.nl/pub/os/linux/ubuntu noble-backports main restricte
 deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
 EOF
 
+# Setup firewall
+#ufw enable
+#ufw default deny incoming
+
 apt update
 apt install -y mint-meta-codecs
 
