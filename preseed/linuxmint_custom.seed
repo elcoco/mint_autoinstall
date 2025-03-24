@@ -27,10 +27,6 @@ ubiquity ubiquity/poweroff boolean true
 ### OEM #######################################################################
 d-i ubiquity/summary note
 
-# NOTE: When user checks automatically login, this will leave the user with a broken system.
-#       The OEM user is not removed for some reason and is set to login automatically at boot.
-#       When commented out, it works fine but installer will ask for an OEM password.
-
 # Set temporary oem account, will be removed later.
 d-i oem-config/enable boolean true
 d-i passwd/user-fullname string OEM
