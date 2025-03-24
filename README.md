@@ -47,6 +47,10 @@ When booting from this USB stick, a new boot menu option becomes available: "Rep
 During this OEM install the preseed file is read and the install should be completely silent.  
 
 ## Debugging
+### Log files
+
+    Installation log files can be found on the freshly installed computer at: /var/log/installer
+
 ### Mount virtualbox .VDI files with fuse
 
     # Create mountpoints
