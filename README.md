@@ -34,7 +34,7 @@ The script requires xorriso and isolinux to be installed:
 
 Run the script:
 
-    ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -p path/to/this/repo/preseed
+    sudo ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -p path/to/this/repo/preseed
 
 ### Write image to disk
 Find the device file for your usb stick (probably something like /dev/sdx)  
@@ -54,7 +54,7 @@ In my case this is */dev/sdb*.
     sdd            8:48   1     0B  0 disk
     zram0        253:0    0     4G  0 disk  [SWAP]
 
-Write the new iso file to a usb stick.  
+Write the new iso file to an unmounted USB stick.  
 Be very carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't ask any questions before writing to a de  
 It will write over your system disk without any problems ;)  
 
@@ -93,4 +93,6 @@ Example debian preseed config [options](https://www.debian.org/releases/bookworm
 https://gitlab.com/morph027/preseed-cinnamon-ubuntu  
 https://linuxconfig.org/how-to-perform-unattedended-debian-installations-with-preseed  
 https://wiki.ubuntu.com/UbiquityAutomation  
+
+
 https://wiki.ubuntu.com/DebuggingUbiquity  
