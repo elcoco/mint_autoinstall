@@ -55,7 +55,7 @@ In my case this is */dev/sdb*.
     zram0        253:0    0     4G  0 disk  [SWAP]
 
 Write the new iso file to an unmounted USB stick.  
-Be very carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't ask any questions before writing to a de  
+Be very carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't ask any questions before writing to a device  
 It will write over your system disk without any problems ;)  
 
     # NOTE: Replace <DEVICE> with the path to your USB stick's device file
