@@ -21,35 +21,53 @@ We need to start off with a default linux mint install image: [download](https:/
 
 In this repository you can find a [script](/build_iso.sh) that automatically builds a custom image from a default linux mint image.  
 
+    # Install git if it isn't already installed
+    sudo apt install git
+
+    # Clone the git repository
     git clone https://github.com/elcoco/mint_autoinstall
 
-The script requires mkisofs to be installed:  
+The script requires xorriso and isolinux to be installed:  
 
-    sudo pacman -S cdrtools         # Arch
-    sudo apt install mkisofs        # Debian/Mint/Ubuntu
+    sudo pacman -S libisoburn               # Arch
+    sudo apt install xorriso isolinux       # Debian/Mint/Ubuntu
 
 Run the script:
 
     ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -p path/to/this/repo/preseed
 
 ### Write image to disk
-Find the device file for your usb stick (probably something like /dev/sdx):
+Find the device file for your usb stick (probably something like /dev/sdx)  
+In my case this is */dev/sdb*.  
 
-    lsblk
+    $ lsblk                                                                                                             20:18:16
+    NAME         MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS
+    sda            8:0    0 931,5G  0 disk
+    ├─sda1         8:1    0   511M  0 part  /boot
+    └─sda2         8:2    0   931G  0 part
+    └─cryptlvm 254:0    0   931G  0 crypt /
+    sdb            8:16   1  28,7G  0 disk
+    ├─sdb1         8:17   1   2,8G  0 part
+    ├─sdb2         8:18   1   2,2M  0 part
+    └─sdb3         8:19   1  25,9G  0 part
+    sdc            8:32   1     0B  0 disk
+    sdd            8:48   1     0B  0 disk
+    zram0        253:0    0     4G  0 disk  [SWAP]
 
 Write the new iso file to a usb stick.  
-Be carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't ask any questions before writing to a device ;)
+Be very carefull, [dd](https://www.man7.org/linux/man-pages/man1/dd.1.html) doesn't ask any questions before writing to a de  
+It will write over your system disk without any problems ;)  
 
-    sudo dd if=out.iso of=/path/to/usb_stick bs=8M status=progress
+    # NOTE: Replace <DEVICE> with the path to your USB stick's device file
+    sudo dd if=out.iso of=/dev/<DEVICE> bs=8M status=progress
 
 The linuxmint_custom.seed file is copied to the image.  
 When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install".  
 During this OEM install the preseed file is read and the install should be completely silent.  
 
-## Debugging
-### Log files
-
-    Installation log files can be found on the freshly installed computer at: /var/log/installer
+## Debugging  
+### Log files  
+Installation log files can be found on the freshly installed computer at: /var/log/installer
 
 ### Mount virtualbox .VDI files with fuse
 
@@ -69,6 +87,7 @@ During this OEM install the preseed file is read and the install should be compl
 
 
 ## Credits
+https://wiki.syslinux.org/wiki/index.php?title=Isohybrid
 https://github.com/Pauchu/linux-mint-20-preseeding  
 Example debian preseed config [options](https://www.debian.org/releases/bookworm/example-preseed.txt)   
 https://gitlab.com/morph027/preseed-cinnamon-ubuntu  

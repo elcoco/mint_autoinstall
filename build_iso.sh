@@ -4,8 +4,11 @@
 MOUNT_DIR=/mnt
 TMP_DIR=/tmp/build_iso
 
+MBR_IMAGE_PATHS=( "/usr/lib/ISOLINUX/isohdpfx.bin"          # debian
+                  "/usr/lib/syslinux/bios/isohdpfx.bin" )   # archlinux
+
 usage() {
-    echo "build_iso.sh -i <INPUT_ISO> -o <OUTPUT_ISO> -c <PRESEED_DIR>"
+    echo "build_iso.sh -i <INPUT_ISO> -o <OUTPUT_ISO> -c <PRESEED_DIR> -m <MBR_IMG_PATH>"
 }
 
 die() {
@@ -29,7 +32,7 @@ cleanup() {
     fi
 }
 
-while getopts ":i:o:p:h" c; do
+while getopts ":i:o:p:m:h" c; do
     case $c in
         i) 
             ISO_IN="$OPTARG"
@@ -39,6 +42,9 @@ while getopts ":i:o:p:h" c; do
             ;;
         p) 
             PRESEED_DIR="$OPTARG"
+            ;;
+        m) 
+            MBR_IMAGE_PATHS=("$OPTARG")
             ;;
         :)
             usage
@@ -67,7 +73,20 @@ fi
 [[ -z "$PRESEED_DIR" ]] && usage && die "Specify path to preseed directory!"
 [[ -d "$PRESEED_DIR" ]] || die "Failed to find preseed directory, $PRESEED_DIR"
 
-[[ $(command -v mkisofs 2>&1) ]] || die "mkisofs not found, install first!"
+[[ $(command -v xorriso 2>&1) ]] || die "Xorriso not found, install first!"
+
+# Find MBR image
+for IMG_PATH in "${MBR_IMAGE_PATHS[@]}" ; do
+    if [[ -f "$IMG_PATH" ]] ; then
+        log "mbr image found in: $IMG_PATH"
+        MBR_IMG="$IMG_PATH"
+        break
+    else
+        log "MBR image not found in: $IMG_PATH"
+    fi
+done
+
+[[ -z $MBR_IMG ]] && die "isohdpfx.bin not found on system, install isolinux or specify path with -m"
 
 
 if [[ -d "$TMP_DIR" ]] ; then
@@ -107,7 +126,28 @@ fi
 
 # mkisofs -o output.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Ubuntu Custom ISO Preseed" .
 log "Making iso"
-if (! mkisofs -o "$ISO_OUT" -b isolinux/isolinux.bin -c isolinux/isolinux.cat -no-emul-boot -boot-info-table -J -R -V "Custom LinuxMint" $TMP_DIR) ; then
+#if (! mkisofs -o "$ISO_OUT" -b isolinux/isolinux.bin -c isolinux/isolinux.cat -no-emul-boot -boot-info-table -J -R -V "Custom LinuxMint" $TMP_DIR) ; then
+#    die "Failed to build $ISO_OUT from $TMP_DIR"
+#fi
+
+# Build the ISO
+# NOTE: Order of arguments matter
+if (! xorriso -as mkisofs \
+    -D -r -J -l \
+    -V "custom_mint_v22.1" \
+    -isohybrid-mbr "$MBR_IMG" \
+    -c isolinux/isolinux.cat \
+    -b isolinux/isolinux.bin \
+      -no-emul-boot \
+      -boot-load-size 4 \
+      -boot-info-table \
+    -eltorito-alt-boot \
+      -e EFI/boot/grubx64.efi \
+      -no-emul-boot \
+      -isohybrid-gpt-basdat \
+    -o "$ISO_OUT" \
+    "$TMP_DIR" ) ;
+then
     die "Failed to build $ISO_OUT from $TMP_DIR"
 fi
 
