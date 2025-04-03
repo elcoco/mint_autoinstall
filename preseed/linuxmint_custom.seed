@@ -71,7 +71,12 @@ d-i partman-auto/choose_recipe  select atomic
 d-i partman/default_filesystem  string ext4
 d-i partman-auto/init_automatically_partition select biggest_free
 # default is first disk
-#d-i grub-installer/bootdev  string default  # default=first device
+
+# https://github.com/linuxmint/ubiquity/blob/master/d-i/source/grub-installer/debian/grub-installer.templates
+# empty string=don't install bootloader
+#d-i grub-installer/bootdev  string default
+#d-i grub-installer/bootdev  string /dev/sda
+d-i grub-installer/bootdev  string
 
 # regular partition layout
 ubiquity partman-auto/method string regular

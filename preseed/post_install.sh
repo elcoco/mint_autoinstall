@@ -1,6 +1,22 @@
 #!/usr/bin/env bash
 
 # NOTE: Script will be run at end of install inside a chroot
+#
+
+BOOT_DEVS=("/dev/sda" "/dev/nvme0n0")
+
+# Install bootloader to first device
+for BOOT_DEV in "${BOOT_DEVS[@]}" ; do
+    if [[ -f "$BOOT_DEV" ]] ; then
+        echo "Installing bootloader on: $BOOT_DEV"
+        grub-install --force "$BOOT_DEV"
+        #parted -s $3 -- set ${4##*-} boot on
+        break
+    fi
+done
+
+[[ -z $BOOT_DEV ]] && echo "Failed to install bootloader, couldn't find destination device"
+
 
 # Backup default sources.list
 if [[ -f /etc/apt/sources.list.d/official-package-repositories.list ]] ; then
