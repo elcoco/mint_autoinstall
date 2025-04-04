@@ -1,6 +1,11 @@
 # Method for auto installing linux mint by using a preseed
-NOTE: I tested with the latest (v22.1) cinnamon linux mint iso on a virtual machine.  
-      This still needs proper testing on real hardware.  
+
+    NOTE0: I tested with the latest (v22.1) cinnamon linux mint iso on a virtual machine.  
+           This still needs proper testing on real hardware.  
+    NOTE1: EFI booting is broken atm. The EFI image on the mint iso can not be used.
+           more info is here:
+           - https://unix.stackexchange.com/questions/710180/boot-on-a-modified-iso-image
+           - https://unix.stackexchange.com/questions/283994/why-is-grub2-ignoring-kernel-options-when-boot-from-el-torito-on-cd
 
 A preseed file is a list of answers to questions that are asked by the linux mint installer.  
 It's the native way of doing automatic installs on debian like distro's.  

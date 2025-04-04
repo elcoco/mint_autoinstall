@@ -78,7 +78,7 @@ fi
 # Find MBR image
 for IMG_PATH in "${MBR_IMAGE_PATHS[@]}" ; do
     if [[ -f "$IMG_PATH" ]] ; then
-        log "mbr image found in: $IMG_PATH"
+        log "MBR image found in: $IMG_PATH"
         MBR_IMG="$IMG_PATH"
         break
     else
@@ -134,6 +134,7 @@ log "Making iso"
 # NOTE: Order of arguments matter
 if (! xorriso -as mkisofs \
     -D -r -J -l \
+    -joliet-long \
     -V "custom_mint_v22.1" \
     -isohybrid-mbr "$MBR_IMG" \
     -c isolinux/isolinux.cat \
@@ -142,7 +143,7 @@ if (! xorriso -as mkisofs \
       -boot-load-size 4 \
       -boot-info-table \
     -eltorito-alt-boot \
-      -e EFI/boot/grubx64.efi \
+      -e EFI/boot/bootx64.efi \
       -no-emul-boot \
       -isohybrid-gpt-basdat \
     -o "$ISO_OUT" \
@@ -150,6 +151,9 @@ if (! xorriso -as mkisofs \
 then
     die "Failed to build $ISO_OUT from $TMP_DIR"
 fi
+
+#      -e EFI/boot/efi.img \
+#      -e EFI/boot/grubx64.efi \
 
 cleanup
 exit 0
