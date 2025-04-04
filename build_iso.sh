@@ -133,8 +133,9 @@ log "Making iso"
 # Build the ISO
 # NOTE: Order of arguments matter
 if (! xorriso -as mkisofs \
-    -D -r -J -l \
-    -joliet-long \
+    -D -r -l \
+     -J -J -joliet-long \
+    -cache-inodes \
     -V "custom_mint_v22.1" \
     -isohybrid-mbr "$MBR_IMG" \
     -c isolinux/isolinux.cat \

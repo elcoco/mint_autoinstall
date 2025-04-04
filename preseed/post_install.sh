@@ -3,7 +3,7 @@
 # NOTE: Script will be run at end of install inside a chroot
 #
 
-#BOOT_DEVS=("/dev/sda" "/dev/nvme0n0")
+#BOOT_DEVS=("/dev/sda" "/dev/nvme0n1" "/dev/hda")
 #
 ## Install bootloader to first device
 #for BOOT_DEV in "${BOOT_DEVS[@]}" ; do
