@@ -3,19 +3,19 @@
 # NOTE: Script will be run at end of install inside a chroot
 #
 
-BOOT_DEVS=("/dev/sda" "/dev/nvme0n0")
-
-# Install bootloader to first device
-for BOOT_DEV in "${BOOT_DEVS[@]}" ; do
-    if [[ -f "$BOOT_DEV" ]] ; then
-        echo "Installing bootloader on: $BOOT_DEV"
-        grub-install --force "$BOOT_DEV"
-        #parted -s $3 -- set ${4##*-} boot on
-        break
-    fi
-done
-
-[[ -z $BOOT_DEV ]] && echo "Failed to install bootloader, couldn't find destination device"
+#BOOT_DEVS=("/dev/sda" "/dev/nvme0n0")
+#
+## Install bootloader to first device
+#for BOOT_DEV in "${BOOT_DEVS[@]}" ; do
+#    if [[ -e "$BOOT_DEV" ]] ; then
+#        echo "Installing bootloader on: $BOOT_DEV"
+#        grub-install --force "$BOOT_DEV"
+#        parted $BOOT_DEV set 1 boot on
+#        break
+#    fi
+#done
+#
+#[[ -z $BOOT_DEV ]] && echo "Failed to install bootloader, couldn't find destination device"
 
 
 # Backup default sources.list
@@ -35,8 +35,8 @@ deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe m
 EOF
 
 # Setup firewall
-#ufw enable
-#ufw default deny incoming
+ufw enable
+ufw default deny incoming
 
 apt update
 apt install -y mint-meta-codecs
@@ -46,5 +46,3 @@ mintupdate-automation upgrade enable
 
 # Next boot will show OEM user configuration
 oem-config-prepare
-
-echo "SUCCESS!" >> /tmp/install.log

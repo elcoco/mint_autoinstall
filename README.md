@@ -65,12 +65,6 @@ The linuxmint_custom.seed file is copied to the image.
 When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install".  
 During this OEM install the preseed file is read and the install should be completely silent.  
 
-## Note
-The automatic install partitions the first device it can find. It will then install linux on it.
-The post install script then finds the first device (sda or nvme) and installs the bootloader to the MBR.  
-Although this works in almost all cases, this may in some cases not be the device where linux is installed.  
-There should be an option in the ubiquity installer to install to the appropriate device but i wasn't able to find it.  
-
 
 ## Debugging  
 ### Log files  

@@ -74,9 +74,9 @@ d-i partman-auto/init_automatically_partition select biggest_free
 
 # https://github.com/linuxmint/ubiquity/blob/master/d-i/source/grub-installer/debian/grub-installer.templates
 # empty string=don't install bootloader
-#d-i grub-installer/bootdev  string default
+d-i grub-installer/bootdev  string default
 #d-i grub-installer/bootdev  string /dev/sda
-d-i grub-installer/bootdev  string
+#d-i grub-installer/bootdev  string
 
 # regular partition layout
 ubiquity partman-auto/method string regular
