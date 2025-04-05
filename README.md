@@ -61,7 +61,7 @@ It will write over your system disk without any problems ;)
     sudo dd if=out.iso of=/dev/<DEVICE> bs=8M status=progress
 
 The linuxmint_custom.seed file is copied to the image.  
-When booting from this USB stick, a new boot menu option becomes available: "Repair cafe preseeded OEM install".  
+When booting from this USB stick, a new boot menu option becomes available: "Repair Cafe automated OEM install".  
 During this OEM install the preseed file is read and the install should be completely silent.  
 
 
