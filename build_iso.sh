@@ -8,7 +8,7 @@ MBR_IMAGE_PATHS=( "/usr/lib/ISOLINUX/isohdpfx.bin"          # debian
                   "/usr/lib/syslinux/bios/isohdpfx.bin" )   # archlinux
 
 usage() {
-    echo "build_iso.sh -i <INPUT_ISO> -o <OUTPUT_ISO> -c <PRESEED_DIR> -m <MBR_IMG_PATH>"
+    echo "build_iso.sh -i <INPUT_ISO> -o <OUTPUT_ISO> -p <PRESEED_DIR> -m <MBR_IMG_PATH>"
 }
 
 die() {
@@ -24,7 +24,7 @@ log() {
 cleanup() {
     if [[ -d "$TMP_DIR" ]] ; then
         log "Removing tmp directory: $TMP_DIR..."
-        rm -r $TMP_DIR
+        #rm -r $TMP_DIR
     fi
     if [[ $(findmnt -M "$MOUNT_DIR") ]] ; then
         log "Unmounting ISO..."
@@ -57,6 +57,11 @@ while getopts ":i:o:p:m:h" c; do
     esac
 done
 
+SCRIPTS_DIR="$PRESEED_DIR/scripts"
+CONFIG_DIR="$PRESEED_DIR/config"
+SKEL_DIR="$PRESEED_DIR/skel"
+SEED_DIR="$PRESEED_DIR/seed"
+
 # Sanity checks
 if [[ $(findmnt -M "$MOUNT_DIR") ]] ; then
     echo "Mountpoint already mounted: $MOUNT_DIR, unmount first!"
@@ -72,6 +77,12 @@ fi
 
 [[ -z "$PRESEED_DIR" ]] && usage && die "Specify path to preseed directory!"
 [[ -d "$PRESEED_DIR" ]] || die "Failed to find preseed directory, $PRESEED_DIR"
+
+[[ -d "$SKEL_DIR" ]] || die "Failed to find skel directory, $SKEL_DIR"
+[[ -d "$CONFIG_DIR" ]] || die "Failed to find config directory, $CONFIG_DIR"
+[[ -d "$SCRIPTS_DIR" ]] || die "Failed to find scripts directory, $SCRIPTS_DIR"
+[[ -d "$SEED_DIR" ]] || die "Failed to find seed directory, $SEED_DIR"
+
 
 [[ $(command -v xorriso 2>&1) ]] || die "Xorriso not found, install first!"
 
@@ -109,26 +120,16 @@ if (! cp -rv "$PRESEED_DIR" "$TMP_DIR/preseed") ; then
 fi
 
 log "Copying isolinux.cfg"
-if (! cp -v "$PRESEED_DIR/isolinux.cfg" "$TMP_DIR/isolinux") ; then
-    die "Failed to copy $PRESEED_DIR/isolinux.cfg to $TMP_DIR/isolinux"
+if (! cp -v "$CONFIG_DIR/isolinux.cfg" "$TMP_DIR/isolinux") ; then
+    die "Failed to copy $CONFIG_DIR/isolinux.cfg to $TMP_DIR/isolinux"
 fi
 
-#log "Copying custom preseed"
-#mkdir -p "$TMP_DIR/preseed"
-#if (! cp -v "$PRESEED_DIR/linuxmint_custom.seed" "$TMP_DIR/preseed/linuxmint_custom.seed") ; then
-#    die "Failed to copy $PRESEED_DIR/linuxmint_custom.seed to $TMP_DIR/preseed/linuxmint_custom.seed"
-#fi
+log "Copying grub.cfg"
+if (! cp -v "$CONFIG_DIR/grub.cfg" "$TMP_DIR/boot/grub") ; then
+    die "Failed to copy $CONFIG_DIR/grub.cfg to $TMP_DIR/boot/grub"
+fi
 
-#log "Copying grub.cfg"
-#if (! cp -v $PRESEED_DIR/grub.cfg $TMP_DIR/boot/grub) ; then
-#    die "Failed to copy $PRESEED_DIR/grub.cfg to $TMP_DIR/boot/grub"
-#fi
-
-# mkisofs -o output.iso -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -J -R -V "Ubuntu Custom ISO Preseed" .
-log "Making iso"
-#if (! mkisofs -o "$ISO_OUT" -b isolinux/isolinux.bin -c isolinux/isolinux.cat -no-emul-boot -boot-info-table -J -R -V "Custom LinuxMint" $TMP_DIR) ; then
-#    die "Failed to build $ISO_OUT from $TMP_DIR"
-#fi
+log "Making iso..."
 
 # Build the ISO
 # NOTE: Order of arguments matter
@@ -144,7 +145,7 @@ if (! xorriso -as mkisofs \
       -boot-load-size 4 \
       -boot-info-table \
     -eltorito-alt-boot \
-      -e EFI/boot/bootx64.efi \
+      -e boot/grub/efi.img \
       -no-emul-boot \
       -isohybrid-gpt-basdat \
     -o "$ISO_OUT" \
@@ -152,9 +153,6 @@ if (! xorriso -as mkisofs \
 then
     die "Failed to build $ISO_OUT from $TMP_DIR"
 fi
-
-#      -e EFI/boot/efi.img \
-#      -e EFI/boot/grubx64.efi \
 
 cleanup
 exit 0

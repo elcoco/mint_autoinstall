@@ -1,17 +1,11 @@
 # Method for auto installing linux mint by using a preseed
 
-    NOTE0: I tested with the latest (v22.1) cinnamon linux mint iso on a virtual machine.  
-           This still needs proper testing on real hardware.  
-    NOTE1: EFI booting is broken atm. The EFI image on the mint iso can not be used.
-           more info is here:
-           - https://unix.stackexchange.com/questions/710180/boot-on-a-modified-iso-image
-           - https://unix.stackexchange.com/questions/283994/why-is-grub2-ignoring-kernel-options-when-boot-from-el-torito-on-cd
-
 A preseed file is a list of answers to questions that are asked by the linux mint installer.  
 It's the native way of doing automatic installs on debian like distro's.  
 
 It's easy to set things like localization, apt sources, extra users or run custom scripts.  
 For this to work we have to build a new install image.  
+This image will boot on MBR and EFI systems.
 
 ## Changes from the default install
 
@@ -19,6 +13,7 @@ For this to work we have to build a new install image.
     - Automatic partititioning on biggest harddisk
     - Unattended updates (/etc/system/systemd/timers.targets.wants/mintupdate-automation-upgrade.timer)
     - Install mint-meta-codecs
+    - Add files to /etc/skel directory
 
 ## Creating install medium
 ### Building the custom image
@@ -52,9 +47,6 @@ In my case this is */dev/sdb*.
     └─sda2         8:2    0   931G  0 part
     └─cryptlvm 254:0    0   931G  0 crypt /
     sdb            8:16   1  28,7G  0 disk
-    ├─sdb1         8:17   1   2,8G  0 part
-    ├─sdb2         8:18   1   2,2M  0 part
-    └─sdb3         8:19   1  25,9G  0 part
     sdc            8:32   1     0B  0 disk
     sdd            8:48   1     0B  0 disk
     zram0        253:0    0     4G  0 disk  [SWAP]
@@ -93,12 +85,10 @@ Installation log files can be found on the freshly installed computer at: /var/l
 
 
 ## Credits
-https://wiki.syslinux.org/wiki/index.php?title=Isohybrid
+https://wiki.syslinux.org/wiki/index.php?title=Isohybrid  
 https://github.com/Pauchu/linux-mint-20-preseeding  
 Example debian preseed config [options](https://www.debian.org/releases/bookworm/example-preseed.txt)   
 https://gitlab.com/morph027/preseed-cinnamon-ubuntu  
 https://linuxconfig.org/how-to-perform-unattedended-debian-installations-with-preseed  
 https://wiki.ubuntu.com/UbiquityAutomation  
-
-
 https://wiki.ubuntu.com/DebuggingUbiquity  
