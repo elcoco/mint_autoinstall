@@ -1,5 +1,7 @@
 # Method for auto installing linux mint by using a preseed
 
+NOTE: This method is tested with the latest linux mint 22.1 cinnamon iso
+
 A preseed file is a list of answers to questions that are asked by the linux mint installer.  
 It's the native way of doing automatic installs on debian like distro's.  
 

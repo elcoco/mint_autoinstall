@@ -7,6 +7,8 @@
 #       the ones it doesn't recognise (like: preseed/late_command, pkgsel)
 ubiquity ubiquity/success_command string \
     cp -r /cdrom/preseed/skel/* /target/etc/skel; \
+    in-target find /etc/skel -type d -exec chmod 755 {} \; \
+    in-target find /etc/skel -type f -exec chmod 644 {} \; \
     cp /cdrom/preseed/scripts/post_install.sh /target/tmp; \
     in-target chmod +x /tmp/post_install.sh; \
     in-target /bin/bash /tmp/post_install.sh; \
