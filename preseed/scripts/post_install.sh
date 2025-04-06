@@ -23,6 +23,11 @@ if [[ -f /etc/apt/sources.list.d/official-package-repositories.list ]] ; then
     mv /etc/apt/sources.list.d/official-package-repositories.list /etc/apt/sources.list.d/official-package-repositories.list.bak
 fi
 
+# NOTE: A side effect of changing the mirrors without an internet connection to immediately update them
+#       is that the graphical update manager will show an error saying that the APT configuration is corrupt.
+#       This is easily fixed by pressing the "Refresh" button or by doing a manual "apt update".
+#       If there is an internet connection available (which is recommended anyway for installing
+#       some extra packages), the repos will be updated by this script.
 cat << EOF > /etc/apt/sources.list.d/official-package-repositories.list
 # Preseeded sources.list
 deb https://ftp.nluug.nl/os/Linux/distr/linuxmint/packages xia main upstream import backport
@@ -31,18 +36,18 @@ deb http://ftp.snt.utwente.nl/pub/os/linux/ubuntu noble main restricted universe
 deb http://ftp.snt.utwente.nl/pub/os/linux/ubuntu noble-updates main restricted universe multiverse
 deb http://ftp.snt.utwente.nl/pub/os/linux/ubuntu noble-backports main restricted universe multiverse
 
-deb http://security.ubuntu.com/ubuntu noble-security main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
 EOF
-
-# Setup firewall
-ufw enable
-ufw default deny incoming
 
 apt update
 apt install -y mint-meta-codecs
 
 # Set automatic updates
 mintupdate-automation upgrade enable
+
+# Setup firewall
+ufw enable
+ufw default deny incoming
 
 # Next boot will show OEM user configuration
 oem-config-prepare
