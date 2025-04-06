@@ -31,7 +31,7 @@ deb http://ftp.snt.utwente.nl/pub/os/linux/ubuntu noble main restricted universe
 deb http://ftp.snt.utwente.nl/pub/os/linux/ubuntu noble-updates main restricted universe multiverse
 deb http://ftp.snt.utwente.nl/pub/os/linux/ubuntu noble-backports main restricted universe multiverse
 
-deb http://security.ubuntu.com/ubuntu/noble-security main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
 EOF
 
 # Setup firewall
