@@ -15,7 +15,7 @@ This image will boot on MBR and EFI systems.
     - Automatic partititioning on biggest harddisk
     - Unattended updates (/etc/system/systemd/timers.targets.wants/mintupdate-automation-upgrade.timer)
     - Install mint-meta-codecs
-    - Add files to /etc/skel directory
+    - Post user creation script that copies files from the skel dir to the user's XDG directories.
 
 ## Creating install medium
 ### Building the custom image
@@ -34,7 +34,7 @@ The script requires xorriso and isolinux to be installed:
     sudo pacman -S libisoburn               # Arch
     sudo apt install xorriso isolinux       # Debian/Mint/Ubuntu
 
-Run the script:
+Run the script from the repo:
 
     sudo ./build_iso.sh -i path/to/linuxmint-XX.X-cinnamon-64bit.iso -o out.iso -p path/to/this/repo/preseed
 
@@ -61,7 +61,7 @@ It will write over your system disk without any problems ;)
     sudo dd if=out.iso of=/dev/<DEVICE> bs=8M status=progress
 
 The linuxmint_custom.seed file is copied to the image.  
-When booting from this USB stick, a new boot menu option becomes available: "Repair Cafe automated OEM install".  
+When booting from this USB stick, a new boot menu option becomes available: "Automated OEM install".  
 During this OEM install the preseed file is read and the install should be completely silent.  
 
 

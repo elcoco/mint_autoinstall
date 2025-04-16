@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# /usr/local/sbin/adduser.local is ran after a user has been created.
+# Files in skel/Desktop are copied to the right XDG desktop dir.
+# This can't be done using simple skel because the names of the XDG dirs are localized.
+#
+# IMPORTANT: script should be executable
+#
+#       $0            $1   $2  $3  $4
+# ARGS: adduser.local USER UID GID HOME
+
+LOG_FILE="/tmp/adduser.log"
+DESKTOP_SRC_DIR="/etc/skel_user/Desktop"
+
+die() {
+    echo "ERROR: $1"
+    echo "ERROR: $1" >> $LOG_FILE
+    exit 1
+}
+
+log() {
+    echo "[$( date '+%Y-%m-%d %H:%M:%S')] $1"
+    echo "[$( date '+%Y-%m-%d %H:%M:%S')] $1" >> $LOG_FILE
+}
+
+log "Running adduser.local: 0=$0, 1=$1, 2=$2, 3=$3, 4=$4"
+
+# Update XDG dirs
+su -c xdg-user-dirs-update - $1
+XDG_DESKTOP_DIR=$(su -c "xdg-user-dir DESKTOP" - $1)
+
+# Debugging
+log "copying: $DESKTOP_SRC_DIR -> $XDG_DESKTOP_DIR"
+
+#[[ -z $XDG_DESKTOP_DIR ]] && die "Failed to source XDG_DESKTOP_DIR"
+[[ -d $DESKTOP_SRC_DIR ]] || die "DESKTOP_SRC_DIR not found: $DESKTOP_SRC_DIR"
+
+
+# Copy desktop files to the appropriate directory
+su -c "mkdir -pv $XDG_DESKTOP_DIR" - $1
+su -c "cp -r $DESKTOP_SRC_DIR/* $XDG_DESKTOP_DIR" - $1
+
