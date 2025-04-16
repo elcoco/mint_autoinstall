@@ -20,17 +20,17 @@ die() {
 
 log() {
     echo "[$( date '+%Y-%m-%d %H:%M:%S')] $1"
-    echo "[$( date '+%Y-%m-%d %H:%M:%S')] $1" >> $LOG_FILE
+    #echo "[$( date '+%Y-%m-%d %H:%M:%S')] $1" >> $LOG_FILE
 }
 
-log "Running adduser.local: 0=$0, 1=$1, 2=$2, 3=$3, 4=$4"
+#log "Running adduser.local: 0=$0, 1=$1, 2=$2, 3=$3, 4=$4"
 
 # Update XDG dirs
 su -c xdg-user-dirs-update - $1
 XDG_DESKTOP_DIR=$(su -c "xdg-user-dir DESKTOP" - $1)
 
 # Debugging
-log "copying: $DESKTOP_SRC_DIR -> $XDG_DESKTOP_DIR"
+#log "copying: $DESKTOP_SRC_DIR -> $XDG_DESKTOP_DIR"
 
 #[[ -z $XDG_DESKTOP_DIR ]] && die "Failed to source XDG_DESKTOP_DIR"
 [[ -d $DESKTOP_SRC_DIR ]] || die "DESKTOP_SRC_DIR not found: $DESKTOP_SRC_DIR"
