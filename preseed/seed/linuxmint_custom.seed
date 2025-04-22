@@ -42,6 +42,7 @@ d-i user-setup/allow-password-weak boolean true
 
 
 ### LOCALIZATION ##############################################################
+#d-i debian-installer/locale string nl_NL.UTF-8
 d-i debian-installer/locale string en_US.UTF-8
 
 # Keyboard selection.
@@ -98,7 +99,3 @@ ubiquity partman/confirm_nooverwrite boolean true
 # This is fairly safe to set, it makes grub install automatically to the MBR
 # if no other operating system is detected on the machine.
 d-i grub-installer/only_debian boolean true
-
-# This one makes grub-installer install to the MBR if it also finds some other
-# OS, which is less safe as it might not be able to boot that other OS.
-#d-i grub-installer/with_other_os boolean true
